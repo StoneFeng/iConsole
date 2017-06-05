@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+	<definition name="base.definition" template="/WEB-INF/layout/page.jsp">
+		<put-attribute name="title" value="" />
+		<put-attribute name="header" value="/WEB-INF/layout/header.jsp" />
+		<put-attribute name="menu" value="/WEB-INF/layout/menu.jsp" />
+		<put-attribute name="body" value="" />
+		<put-attribute name="footer" value="/WEB-INF/layout/footer.jsp" />
+	</definition>
+	<definition name="home" extends="base.definition">
+		<put-attribute name="body" value="/index.jsp" />
+	</definition>
+	<definition name="tomcatInfo" extends="base.definition">
+		<put-attribute name="body" value="/WEB-INF/views/tomcatInfo.jsp" />
+	</definition>
+	<definition name="tomcatLog" extends="base.definition">
+		<put-attribute name="body" value="/WEB-INF/views/tomcatLog.jsp" />
+	</definition>
+	<definition name="tomcatLogList" extends="base.definition">
+		<put-attribute name="body" value="/WEB-INF/views/tomcatLogList.jsp" />
+	</definition>
+	<definition name="singleLogContent" extends="base.definition">
+		<put-attribute name="body" value="/WEB-INF/views/singleLogContent.jsp" />
+	</definition>
+	<definition name="tomcatLifecycleMgt" extends="base.definition">
+		<put-attribute name="body" value="/WEB-INF/views/tomcatLifecycleMgt.jsp" />
+	</definition>
+	<definition name="httpdLifecycleMgt" extends="base.definition">
+		<put-attribute name="body" value="/WEB-INF/views/httpdLifecycleMgt.jsp" />
+	</definition>
+	<definition name="keepalivedLifecycleMgt" extends="base.definition">
+		<put-attribute name="body" value="/WEB-INF/views/keepalivedLifecycleMgt.jsp" />
+	</definition>
+	<definition name="osRes" extends="base.definition">
+		<put-attribute name="body" value="/WEB-INF/views/osRes.jsp" />
+	</definition>
+	<definition name="quartzJobMgt" extends="base.definition">
+		<put-attribute name="body" value="/WEB-INF/views/quartzJobMgt.jsp" />
+	</definition>
+	<definition name="osResAlarm" extends="base.definition">
+		<put-attribute name="body" value="/WEB-INF/views/osResAlarm.jsp" />
+	</definition>
+</tiles-definitions>

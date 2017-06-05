@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+
+	<!-- 配置自动扫描的包 -->
+	<context:component-scan base-package="com.singland.console"></context:component-scan>
+	<!-- springmvc不做如下配置则无法在网页访问静态资源 -->
+	<mvc:resources mapping="/images/**" location="/resources/images/" />
+	<mvc:resources mapping="/js/**" location="/js/" />
+	<mvc:annotation-driven />
+
+	<bean id="osResProvider"
+		class="com.singland.console.service.impl.OsResourceProviderImpl"></bean>
+	<bean id="tomcatService"
+		class="com.singland.console.service.impl.TomcatServiceImpl"></bean>
+	<bean id="tomcatLogService"
+		class="com.singland.console.service.impl.TomcatLogServiceImpl"></bean>
+	<bean id="lifecycleService"
+		class="com.singland.console.service.impl.LifecycleServiceImpl"></bean>
+
+	<!-- test JSR-303 -->
+	<!-- <bean class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor"/> 
+		<bean id="userService" class="com.singland.console.service.impl.UserService"/> -->
+
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<property name="viewClass">
+			<value>
+				org.springframework.web.servlet.view.tiles2.TilesView
+			</value>
+		</property>
+	</bean>
+	<bean id="tilesConfigurer"
+		class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+		<property name="definitions">
+			<list>
+				<value>/WEB-INF/tiles.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- quartz -->
+	<!-- 线程执行器配置，用于任务注册 -->
+	<!-- <bean id="executor"
+		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<property name="corePoolSize" value="10" />
+		<property name="maxPoolSize" value="100" />
+		<property name="queueCapacity" value="500" />
+	</bean>-->
+	<!-- 业务对象 -->
+	<bean id="scanResAvailabilityJob"
+		class="com.singland.console.quartz.ScanResAvailabilityJob" />
+	<bean id="scanProcStatusJob" class="com.singland.console.quartz.ScanProcStatusJob" />
+	<!-- 调度业务 -->
+	<bean id="scanResAvailabilityJobJd"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="scanResAvailabilityJob" />
+		<property name="targetMethod" value="scan" />
+		<property name="concurrent" value="true"/>
+	</bean>
+	<bean id="osResKeepRecordsJd"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="scanResAvailabilityJob" />
+		<property name="targetMethod" value="keepRecords" />
+		<property name="concurrent" value="true"/>
+	</bean>
+	<bean id="scanProcStatusJobJd"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="scanProcStatusJob" />
+		<property name="targetMethod" value="scan" />
+		<property name="concurrent" value="true"/>
+	</bean>
+	<bean id="cronTrigger1" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="scanResAvailabilityJobJd" />
+		<property name="cronExpression" value="0 0/30 * * * ?" />
+	</bean>
+	<bean id="cronTrigger2" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="scanProcStatusJobJd" />
+		<property name="cronExpression" value="0 0/30 * * * ?" />
+	</bean>
+	<bean id="cronTrigger3" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="osResKeepRecordsJd" />
+		<property name="cronExpression" value="0 0/30 * * * ?" />
+	</bean>
+	<bean id="taskTrigger" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="cronTrigger1" />
+				<ref bean="cronTrigger2" />
+				<ref bean="cronTrigger3" />
+			</list>
+		</property>
+	</bean>
+	<!-- quartz -->
+</beans>
