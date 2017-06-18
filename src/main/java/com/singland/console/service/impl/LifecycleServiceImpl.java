@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jolokia.client.J4pClient;
+import org.jolokia.client.exception.J4pConnectException;
 import org.jolokia.client.request.J4pExecRequest;
 import org.jolokia.client.request.J4pExecResponse;
 import org.slf4j.Logger;
@@ -46,7 +47,12 @@ public class LifecycleServiceImpl implements ILifecycleService {
 			if (client == null) {
 				LOGGER.debug("Oops!");
 			}
-			J4pExecResponse resp = client.execute(req);
+			J4pExecResponse resp = null;
+			try {
+				resp = client.execute(req);
+			} catch (J4pConnectException e) {
+				LOGGER.error(String.format("System unable connect to %s, please start that tomcat accordingly", url));
+			}
 			LOGGER.debug("resp: " + resp);
 			if (resp == null) {
 				continue; // ignore the case of some tomcat instance was shutdown
