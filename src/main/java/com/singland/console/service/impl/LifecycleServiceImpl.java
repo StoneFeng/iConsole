@@ -63,7 +63,8 @@ public class LifecycleServiceImpl implements ILifecycleService {
 				String host = m.get("host");
 				String hostDesc = PropertiesHelper.getHostDesc(host);
 				if ("listAllTomcats".equals(mbeanMethod)) {
-					hostDesc = hostDesc + " " + m.get("tomcatName");
+//					hostDesc = hostDesc + " " + m.get("tomcatName");
+					hostDesc = m.get("tomcatName");
 				}
 				String port = m.get("port");
 				String status = m.get("status");

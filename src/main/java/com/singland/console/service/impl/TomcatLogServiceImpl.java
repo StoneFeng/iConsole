@@ -31,6 +31,7 @@ public class TomcatLogServiceImpl implements ITomcatLogService {
 	private static final String PRINT_SINGLE_LOG_FILE = "printSingleLogFile";
 	private static final String CLEAR_LOG = "clearLog";
 	private static final String DELETE_LOG = "deleteLog";
+	private static final String DELETE_LOG_BATCH = "deleteLogBatch";
 	private static final Logger LOGGER = LoggerFactory.getLogger(TomcatLogServiceImpl.class);
 
 	@SuppressWarnings("unchecked")
@@ -122,6 +123,14 @@ public class TomcatLogServiceImpl implements ITomcatLogService {
 		path = path.replaceAll("\\\\", "/");
 		J4pExecRequest req = new J4pExecRequest(TOMCAT_LOG_MBEAN_NAME, DELETE_LOG, new Object [] {path});
 		J4pHelper.getJ4pClient(jolokiaUrl).execute(req);
+	}
+
+	@Override
+	public void deleteLogBatch(String jolokiaUrl, String path) throws Exception {
+		path = path.replaceAll("\\\\", "/");
+		J4pExecRequest req = new J4pExecRequest(TOMCAT_LOG_MBEAN_NAME, DELETE_LOG_BATCH, new Object [] {path});
+		J4pHelper.getJ4pClient(jolokiaUrl).execute(req);
+		
 	}
 
 }

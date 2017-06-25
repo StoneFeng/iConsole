@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -34,7 +34,7 @@ public class TomcatServiceImpl implements ITomcatService {
 
 		List<TomcatInfoVo> list = new CopyOnWriteArrayList<TomcatInfoVo>();
 
-		Executor exec = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() + 1);
+		ExecutorService exec = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() + 1);
 
 		for (String url : UrlHelper.parseRemoteJolokiaUrl("JOLOKIA_URL_4_TOMCAT_WEB_MODULE")) {
 			J4pSearchResponse resp = J4pHelper.getJ4pSearchResponse(url, "*:j2eeType=WebModule,*");
@@ -73,7 +73,14 @@ public class TomcatServiceImpl implements ITomcatService {
 				}
 			}
 		}
-		TimeUnit.SECONDS.sleep(1);
+		exec.shutdown();
+		while (true) {
+			if (exec.isTerminated()) {
+				break;
+			} else {
+				TimeUnit.SECONDS.sleep(1);
+			}
+		}
 		return list;
 	}
 

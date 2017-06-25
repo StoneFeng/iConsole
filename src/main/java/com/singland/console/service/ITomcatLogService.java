@@ -23,4 +23,6 @@ public interface ITomcatLogService {
 	
 	public void deleteLog(String jolokiaUrl, String path) throws Exception;
 	
+	public void deleteLogBatch(String jolokiaUrl, String path) throws Exception;
+	
 }

@@ -77,5 +77,14 @@ public class TomcatLogController {
 		model.addAttribute("jolokiaUrl", jolokiaUrl);
 		return new ModelAndView("tomcatLogList");
 	}
+	
+	@RequestMapping("deleteLogBatch")
+	public ModelAndView deleteLogBatch(Model model, String jolokiaUrl, String path) throws Exception {
+		LOGGER.debug("deleteLogBatch->path: " + path);
+		LOGGER.debug("deleteLogBatch->jolokiaUrl: " + jolokiaUrl);
+		model.addAttribute("jolokiaUrl", jolokiaUrl);
+		tomcatLogService.deleteLogBatch(jolokiaUrl, path);
+		return new ModelAndView("tomcatLogList");
+	}
 
 }

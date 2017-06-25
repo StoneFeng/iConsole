@@ -133,10 +133,11 @@ function stopWebApp(mbeanName, jolokiaUrl) {
 	window.location.href="stopWebApp?mbeanName="+mbeanName+"&jolokiaUrl="+jolokiaUrl; 
 }
 function destroyWebApp(mbeanName, jolokiaUrl) {
-	var sure = confirm("Are you sure ?");
-	if (sure == true) {
-		window.location.href="destroyWebApp?mbeanName="+mbeanName+"&jolokiaUrl="+jolokiaUrl; 
-	}
+	$.messager.confirm('Confirm','确定要卸载应用 ?',function(b){
+	    if (b){
+	    	window.location.href="destroyWebApp?mbeanName="+mbeanName+"&jolokiaUrl="+jolokiaUrl;
+	    }
+	});
 }
 function reloadWebApp(mbeanName, jolokiaUrl) {
 	window.location.href="reloadWebApp?mbeanName="+mbeanName+"&jolokiaUrl="+jolokiaUrl; 
